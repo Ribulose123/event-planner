@@ -14,7 +14,7 @@ export const fadein = (
         x: 0,
         transition: {
           type: "spring",
-          duration: 1.2,
+          duration: 0.5,
           delay: delay,
           stiffness: 80,
           damping: 20,
