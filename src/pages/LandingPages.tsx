@@ -13,10 +13,10 @@ const LandingPages: React.FC = () => {
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <motion.div
-        variants={fadein('down', 0.4)}
+        variants={fadein('down', 0.1)}
         initial='hidden'
         whileInView={'show'}
-        viewport={{once:false, amount:0.7}}
+        viewport={{once:false, amount:0.2}}
          className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-6">
           <h1 className="text-6xl font-poppins font-bold mb-4">
             Plan Your Events Seamlessly!
@@ -44,7 +44,7 @@ const LandingPages: React.FC = () => {
         variants={fadein('left', 0.4)}
         initial='hidden'
         whileInView={'show'}
-        viewport={{once:false, amount:0.7}}
+        viewport={{once:false, amount:0.2}}
          className="absolute bottom-0 w-full py-4 bg-opacity-60 bg-black text-white">
           <div className="flex justify-around items-center max-w-7xl mx-auto px-4">
             <div className="text-center">
@@ -84,7 +84,7 @@ const LandingPages: React.FC = () => {
         variants={fadein("right", 0.2)}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, amount: 0.7 }}
+        viewport={{ once: false, amount: 0.3 }}
         className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
             <img
@@ -129,7 +129,7 @@ const LandingPages: React.FC = () => {
         variants={fadein("left", 0.1)}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, amount: 0.7 }}
+        viewport={{ once: false, amount: 0.3 }}
          className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-8">What Our Users Say</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -163,7 +163,7 @@ const LandingPages: React.FC = () => {
       variants={fadein("down", 0.2)}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: false, amount: 0.7 }}
+      viewport={{ once: false, amount: 0.4 }}
       className="py-10 bg-green-600 text-white text-center">
         <h2 className="text-4xl font-bold mb-4">
           Ready to Plan Your Next Event?
