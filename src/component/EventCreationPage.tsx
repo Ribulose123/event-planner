@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { db, storage } from "../Auth";
+import { db } from "../Auth";
 import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import UploadinfImage from "./UploadinfImage";
 
 interface EventData {
   name: string;
@@ -11,7 +12,7 @@ interface EventData {
   flier: File | null;
 }
 
-const CreateEventForm: React.FC = () => {
+const EventCreationPage: React.FC = () => {
   const [eventData, setEventData] = useState<EventData>({
     name: "",
     location: "",
@@ -20,6 +21,7 @@ const CreateEventForm: React.FC = () => {
   });
   const [status, setStatus] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>("")
   const navigate = useNavigate();
 
   const handleInputChange = (
@@ -29,45 +31,33 @@ const CreateEventForm: React.FC = () => {
     setEventData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setEventData((prev) => ({ ...prev, flier: e.target.files![0] }));
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUploading(true);
-    setStatus("Updating...");
+    setStatus("Uploading...");
 
     try {
-      let flierUrl = "";
-
-      if (eventData.flier) {
-        const flierRef = ref(storage, `fliers/${eventData.flier.name}`);
-        await uploadBytes(flierRef, eventData.flier);
-        flierUrl = await getDownloadURL(flierRef);
-      }
-
       // Add event data to Firestore
-      await addDoc(collection(db, "events"), {
+      await addDoc(collection(db, "Events"), {
         name: eventData.name,
         location: eventData.location,
         tickets: eventData.tickets,
-        flier: flierUrl,
+        imageUrl,
         createdAt: new Date().toISOString(),
       });
 
       // Set status to completed
-      setStatus("Completed!");
+      setStatus("Completed ✅✅");
 
       // Delay navigation to ensure status is rendered
       setTimeout(() => {
+        setStatus(null);
         navigate("/event-list");
-      }, 1500);
+      }, 4000);
     } catch (error) {
       console.error("Error creating event:", error);
       setStatus("Error creating event. Please try again.");
+      setTimeout(() => setStatus(null), 3000);
     } finally {
       setUploading(false);
     }
@@ -78,12 +68,48 @@ const CreateEventForm: React.FC = () => {
       className="relative w-full h-screen bg-center bg-cover"
       style={{ backgroundImage: 'url("/img/floral.jpeg")' }}
     >
-      {/* Status Overlay */}
+      {/* Status Overlay with Animation */}
       {status && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-4 rounded shadow text-center">
-            <p className="text-lg font-bold">{status}</p>
-          </div>
+          <motion.div
+            className="bg-white p-6 w-full roundeded shadow text-center"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.5 }}
+          >
+            {status === "Uploading..." && (
+              <div className="flex items-center justify-center space-x-2">
+                <p className=" font-bold text-blue-500 text-3xl">{status}</p>
+                {/* Animated Dots */}
+                <motion.div
+                  className="w-3 h-3 bg-blue-500 rounded-full"
+                  animate={{ y: [-10, 10, -10] }}
+                  transition={{ repeat: Infinity, duration: 0.6 }}
+                />
+                <motion.div
+                  className="w-3 h-3 bg-blue-500 rounded-full"
+                  animate={{ y: [-10, 10, -10] }}
+                  transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }}
+                />
+                <motion.div
+                  className="w-3 h-3 bg-blue-500 rounded-full"
+                  animate={{ y: [-10, 10, -10] }}
+                  transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }}
+                />
+              </div>
+            )}
+            {status === "Completed!" && (
+              <motion.p
+                className="text-green-600 text-3xl font-bold"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                {status}
+              </motion.p>
+            )}
+          </motion.div>
         </div>
       )}
 
@@ -122,13 +148,7 @@ const CreateEventForm: React.FC = () => {
               required
               className="w-full p-2 mb-4 border border-gray-300 rounded text-slate focus:outline-none"
             />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              required
-              className="w-full p-2 mb-4 border border-gray-300 rounded text-slate focus:outline-none"
-            />
+            <UploadinfImage onUpload={setImageUrl} />
             <button
               type="submit"
               disabled={uploading}
@@ -143,4 +163,4 @@ const CreateEventForm: React.FC = () => {
   );
 };
 
-export default CreateEventForm;
+export default EventCreationPage;
