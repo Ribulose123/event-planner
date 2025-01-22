@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db } from "../Auth"; // Firestore instance
 import { collection, getDocs } from "firebase/firestore";
 
+
 interface Event {
   id: string;
   name: string;
@@ -19,7 +20,7 @@ const EventList: React.FC = () => {
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        const eventsCollection = collection(db, "events");
+        const eventsCollection = collection(db, "Events");
         const snapshot = await getDocs(eventsCollection);
         const eventsData = snapshot.docs.map((doc) => ({
           id: doc.id,
