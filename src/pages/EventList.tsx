@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Auth"; // Firestore instance
 import { collection, getDocs } from "firebase/firestore";
+import Loader from "../content/Loader";
 
 
 interface Event {
@@ -15,6 +16,7 @@ interface Event {
 const EventList: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -37,14 +39,33 @@ const EventList: React.FC = () => {
     fetchEvents();
   }, []);
 
-  if (loading) {
-    return <p className="text-center">Loading events...</p>;
+  useEffect(()=>{
+    const timeOut= setTimeout(()=>{
+      setShowLoader(true)
+    },50000)
+
+    return ()=>clearTimeout(timeOut)
+  })
+
+  if(loading){
+    if(showLoader){
+      return(
+        <div>
+          <Loader/>
+        </div>
+      )
+    } else{
+      return <p>Still fetching data, please wait...</p>;
+    }
   }
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold text-center mb-6">Event List</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {events.length === 0 ? (
+        <p className="text-center text-gray-600">No events available.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {events.map((event) => (
           <div
             key={event.id}
@@ -53,7 +74,7 @@ const EventList: React.FC = () => {
             <img
               src={event.imageUrl}
               alt={event.name}
-              className="w-full h-40 object-cover rounded"
+              className="w-full h-56 object-cover rounded"
             />
             <h2 className="text-xl font-semibold mt-4">{event.name}</h2>
             <p className="text-gray-600">{event.location}</p>
@@ -67,6 +88,9 @@ const EventList: React.FC = () => {
           </div>
         ))}
       </div>
+      )
+      }
+      
     </div>
   );
 };

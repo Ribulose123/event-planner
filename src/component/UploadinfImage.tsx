@@ -39,7 +39,7 @@ const UploadinfImage: React.FC<UploadinfImageProps> = ({ onUpload }) => {
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange}  className="w-full p-2 mb-4 border border-gray-300 rounded text-slate focus:outline-none"/>
+      <input type="file" required onChange={handleFileChange}  className="w-full p-2 mb-4 border border-gray-300 rounded text-slate focus:outline-none"/>
       {loading && <p>Uploading image...</p>}
     </div>
   );

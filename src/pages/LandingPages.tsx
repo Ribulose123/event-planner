@@ -26,7 +26,7 @@ const LandingPages: React.FC = () => {
             tools. From scheduling to RSVPs, we’ve got you covered.
           </p>
           <div className="flex gap-4">
-            <Link to="/event-creation">
+            <Link to="/event-creation/:category">
               <button className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all">
                 Create Event
               </button>
@@ -69,7 +69,7 @@ const LandingPages: React.FC = () => {
         variants={fadein('left', 0.1)}
         initial='hidden'
         whileInView={'show'}
-        viewport={{once:false, amount:0.7}}
+        viewport={{once:false, amount:0.1}}
          className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-8">
             Featured Events
@@ -84,7 +84,7 @@ const LandingPages: React.FC = () => {
         variants={fadein("right", 0.2)}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, amount: 0.3 }}
+        viewport={{ once: false, amount: 0.1 }}
         className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
             <img
@@ -129,7 +129,7 @@ const LandingPages: React.FC = () => {
         variants={fadein("left", 0.1)}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, amount: 0.3 }}
+        viewport={{ once: false, amount: 0.2 }}
          className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-8">What Our Users Say</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -163,7 +163,7 @@ const LandingPages: React.FC = () => {
       variants={fadein("down", 0.2)}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: false, amount: 0.4 }}
+      viewport={{ once: false, amount: 0.1 }}
       className="py-10 bg-green-600 text-white text-center">
         <h2 className="text-4xl font-bold mb-4">
           Ready to Plan Your Next Event?

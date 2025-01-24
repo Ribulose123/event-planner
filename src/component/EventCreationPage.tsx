@@ -5,6 +5,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
 import { Country, State, City } from "country-state-city";
 import UploadinfImage from "./UploadinfImage";
+import Complete from "../content/Complete";
 
 interface SpecificInput {
   input: string;
@@ -65,20 +66,14 @@ const EventCreationPage: React.FC = () => {
   >({});
 
   useEffect(() => {
+    const selectedCategory = categories.find((cat) => cat.name === category);
     if (selectedCategory) {
-      const selectedCategoryData = categories.find(
-        (cat) => cat.name === selectedCategory
+      const fields = Object.fromEntries(
+        selectedCategory.specificInput.map((input) => [input.input, ""])
       );
-      if (selectedCategoryData) {
-        const fields = Object.fromEntries(
-          selectedCategoryData.specificInput.map((input) => [input.input, ""])
-        );
-        setCategorySpecificFields(fields);
-      }
-    } else {
-      setCategorySpecificFields({});
+      setCategorySpecificFields(fields);
     }
-  }, [selectedCategory]);
+  }, [category]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -150,7 +145,8 @@ const EventCreationPage: React.FC = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                {status}
+                <Complete/>
+                <div  className=" hidden">{status}</div>
               </motion.p>
             )}
           </motion.div>
