@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../Auth"; // Firestore instance
+import { db } from "../Auth";
 import { collection, getDocs } from "firebase/firestore";
 import Loader from "../content/Loader";
-
 
 interface Event {
   id: string;
   name: string;
-  location: string;
   tickets: number;
   imageUrl: string;
   createdAt: string;
@@ -39,24 +37,22 @@ const EventList: React.FC = () => {
     fetchEvents();
   }, []);
 
-  useEffect(()=>{
-    const timeOut= setTimeout(()=>{
-      setShowLoader(true)
-    },50000)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowLoader(false);
+    }, 5000);
 
-    return ()=>clearTimeout(timeOut)
-  })
+    return () => clearTimeout(timeout);
+  }, []);
 
-  if(loading){
-    if(showLoader){
-      return(
-        <div>
-          <Loader/>
-        </div>
-      )
-    } else{
-      return <p>Still fetching data, please wait...</p>;
-    }
+  if (loading) {
+    return showLoader ? (
+      <div>
+        <Loader />
+      </div>
+    ) : (
+      <p>Still fetching data, please wait...</p>
+    );
   }
 
   return (
@@ -66,31 +62,29 @@ const EventList: React.FC = () => {
         <p className="text-center text-gray-600">No events available.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.map((event) => (
-          <div
-            key={event.id}
-            className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center"
-          >
-            <img
-              src={event.imageUrl}
-              alt={event.name}
-              className="w-full h-56 object-cover rounded"
-            />
-            <h2 className="text-xl font-semibold mt-4">{event.name}</h2>
-            <p className="text-gray-600">{event.location}</p>
-            <p className="text-gray-800">Tickets Available: {event.tickets}</p>
-            <button
-              onClick={() => alert(`Buying ticket for ${event.name}`)}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center"
             >
-              Buy Ticket
-            </button>
-          </div>
-        ))}
-      </div>
-      )
-      }
-      
+              <img
+                src={event.imageUrl || "https://via.placeholder.com/150"}
+                alt={event.name}
+                className="w-full h-56 object-cover rounded"
+              />
+              <h2 className="text-xl font-semibold mt-4">{event.name}</h2>
+              
+              <p className="text-gray-800">Tickets Available: {event.tickets}</p>
+              <button
+                onClick={() => alert(`Buying ticket for ${event.name}`)}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Buy Ticket
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

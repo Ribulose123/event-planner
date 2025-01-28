@@ -21,7 +21,7 @@ const SampleEventCards: React.FC = () => {
   };
 
   const handleCardClick = (category: string) => {
-    navigate(`/event-creation/${category}`);
+    navigate(`/category-list/${category}`);
   };
 
   return (

@@ -16,7 +16,9 @@ interface SpecificInput {
 interface Category {
   name: string;
   specificInput: SpecificInput[];
+  
 }
+
 
 const categories: Category[] = [
   {
@@ -43,11 +45,21 @@ const categories: Category[] = [
   },
 ];
 
+interface EventData {
+  tickets: string;
+  category: string;
+  description: string;
+  time: string;
+  country: string;
+  state: string;
+  city: string;
+}
+
 const EventCreationPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
 
-  const [eventData, setEventData] = useState({
+  const [eventData, setEventData] = useState<EventData>({
     tickets: "",
     category: category || "General",
     description: "",
@@ -55,7 +67,9 @@ const EventCreationPage: React.FC = () => {
     country: "",
     state: "",
     city: "",
-  });
+  })
+
+ 
 
   const [status, setStatus] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -66,14 +80,13 @@ const EventCreationPage: React.FC = () => {
   >({});
 
   useEffect(() => {
-    const selectedCategory = categories.find((cat) => cat.name === category);
-    if (selectedCategory) {
-      const fields = Object.fromEntries(
-        selectedCategory.specificInput.map((input) => [input.input, ""])
-      );
-      setCategorySpecificFields(fields);
-    }
-  }, [category]);
+    // Updating category-specific fields
+    const selectedCategoryData = categories.find((cat) => cat.name === selectedCategory);
+    const fields = selectedCategoryData
+      ? Object.fromEntries(selectedCategoryData.specificInput.map((input) => [input.input, ""]))
+      : {};
+    setCategorySpecificFields(fields);
+  }, [selectedCategory]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -91,6 +104,10 @@ const EventCreationPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if(!imageUrl){
+      alert("Please upload an image befoe sumbit");
+      return;
+    }
     setUploading(true);
     setStatus("Uploading...");
 
@@ -164,7 +181,11 @@ const EventCreationPage: React.FC = () => {
             <div className="h-[400px] w-full overflow-y-auto hover:overflow-y-auto sm:overflow-y-auto sm:-webkit-overflow-scrolling-touch scrollbar-hide">
               <select
                 value={selectedCategory || ""}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSelectedCategory(value);
+                  setEventData((prev) => ({ ...prev, category: value })); 
+                }}
                 className="w-full p-2 mb-4 border rounded focus:outline-none"
               >
                 <option value="">Select a category</option>
@@ -273,7 +294,7 @@ const EventCreationPage: React.FC = () => {
                 required
                 className="w-full p-2 mb-4 border rounded focus:outline-none"
               />
-              <UploadinfImage onUpload={setImageUrl} />
+              <UploadinfImage onUpload={(url)=>setImageUrl(url)} />
             </div>
 
             <button
@@ -291,3 +312,5 @@ const EventCreationPage: React.FC = () => {
 };
 
 export default EventCreationPage;
+
+

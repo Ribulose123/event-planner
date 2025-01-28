@@ -26,7 +26,7 @@ const LandingPages: React.FC = () => {
             tools. From scheduling to RSVPs, we’ve got you covered.
           </p>
           <div className="flex gap-4">
-            <Link to="/event-creation/:category">
+            <Link to="/event-creation">
               <button className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all">
                 Create Event
               </button>
@@ -85,7 +85,11 @@ const LandingPages: React.FC = () => {
         initial="hidden"
         whileInView="show"
         viewport={{ once: false, amount: 0.1 }}
-        className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+        className="  max-w-7xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-8">
+            Our Features
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="text-center">
             <img
               src="/img/calender.webp"
@@ -120,6 +124,8 @@ const LandingPages: React.FC = () => {
               Track RSVPs and attendee engagement with detailed analytics.
             </p>
           </div>
+          </div>
+          
         </motion.div>
       </section>
 
